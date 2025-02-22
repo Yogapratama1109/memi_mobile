@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../stock/stock_detail.dart';
 
 class StockListPage extends StatefulWidget {
   const StockListPage({super.key});
@@ -10,16 +14,57 @@ class StockListPage extends StatefulWidget {
 
 class _StockListPageState extends State<StockListPage> {
   bool isLoading = true;
-  final List<Map<String, String>> maintenanceData = [];
+  bool hasError = false;
+  List<Map<String, String>> maintenanceData = [];
 
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 1), () {
+    fetchMaintenanceData();
+  }
+
+  Future<void> fetchMaintenanceData() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? userId = prefs.getString('X-USER-MEMO');
+
+      if (userId == null) {
+        throw Exception('User ID not found in local storage');
+      }
+
+      final response = await http.get(
+        Uri.parse('http://203.175.11.163/api/stock-opname/user/$userId'),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        List<dynamic> data =
+            jsonResponse['data']; // Extract list from API response
+
+        setState(() {
+          maintenanceData =
+              data
+                  .map(
+                    (item) => {
+                      "asset_id": item["asset_id"]?.toString() ?? "Unknown",
+                      "title": item["asset_name"]?.toString() ?? "Unknown",
+                      "subtitle":
+                          "${item["category"]?.toString() ?? "Unknown"} | ${item["subcategory"]?.toString() ?? "Unknown"}",
+                      "date": item["created_at"]?.toString() ?? "Unknown",
+                    },
+                  )
+                  .toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load maintenance data');
+      }
+    } catch (e) {
       setState(() {
         isLoading = false;
+        hasError = true;
       });
-    });
+    }
   }
 
   @override
@@ -56,6 +101,13 @@ class _StockListPageState extends State<StockListPage> {
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())
+              : hasError
+              ? const Center(
+                child: Text(
+                  "Error fetching data. Please try again.",
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                ),
+              )
               : maintenanceData.isEmpty
               ? const Center(
                 child: Padding(
@@ -109,7 +161,16 @@ class _StockListPageState extends State<StockListPage> {
                       ],
                     ),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  StockDetailPage(assetId: item["asset_id"]!),
+                        ),
+                      );
+                    },
                   );
                 },
               ),

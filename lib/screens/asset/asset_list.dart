@@ -33,7 +33,7 @@ class _AssetListPageState extends State<AssetListPage> {
       }
 
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/assets/user/$userId'),
+        Uri.parse('http://203.175.11.163/api/assets/user/$userId'),
       );
 
       if (response.statusCode == 200) {
