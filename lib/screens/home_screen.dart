@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/navigation/nav.dart';
 import 'home_page.dart';
+import 'qr.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -40,7 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _pages[_currentIndex],
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QRViewExample()),
+          );
+        },
         backgroundColor: const Color(0xFFCBA851),
         shape: const CircleBorder(),
         child: const Icon(Icons.qr_code_scanner, color: Colors.white, size: 32),
