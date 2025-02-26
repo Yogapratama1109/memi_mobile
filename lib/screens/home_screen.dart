@@ -41,12 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _pages[_currentIndex],
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => QRViewExample()),
-          );
-        },
+        onPressed: () {},
         backgroundColor: const Color(0xFFCBA851),
         shape: const CircleBorder(),
         child: const Icon(Icons.qr_code_scanner, color: Colors.white, size: 32),

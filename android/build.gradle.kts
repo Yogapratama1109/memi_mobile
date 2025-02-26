@@ -19,8 +19,3 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
-
-android {
-    ndkVersion "25.2.9519653"
-}
-
