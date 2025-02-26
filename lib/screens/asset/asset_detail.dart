@@ -327,7 +327,7 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
                           child: const Text(
                             'Update',
