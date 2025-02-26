@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _isEmailValid && _passwordController.text.isNotEmpty
                           ? const Color(0xFFCBA851)
                           : const Color.fromARGB(255, 200, 200, 200),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

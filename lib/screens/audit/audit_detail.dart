@@ -124,8 +124,8 @@ class _DetailAuditState extends State<DetailAudit> {
                               ],
                             ),
                             const SizedBox(height: 4),
-                            const Text(
-                              "Notebook A",
+                            Text(
+                              detail?["asset_name"] ?? "-",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
