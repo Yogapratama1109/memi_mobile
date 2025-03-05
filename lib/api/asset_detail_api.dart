@@ -72,4 +72,46 @@ class ApiAssetDetail {
       throw Exception("Error updating asset: $error");
     }
   }
+
+  Future<Map<String, dynamic>> updateStockAsset(
+    String id,
+    String assetId,
+    Map<String, dynamic> payload,
+  ) async {
+    final Uri url = Uri.parse(
+      "$_baseUrl/update-stock-opname-3/$id/update/$assetId",
+    );
+
+    try {
+      final response = await http
+          .put(
+            url,
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode(payload),
+          )
+          .timeout(
+            const Duration(seconds: 10), // Timeout 10 detik
+            onTimeout: () {
+              throw Exception(
+                "Request timeout. Please check your internet connection.",
+              );
+            },
+          );
+
+      // Periksa kode status HTTP
+      if (response.statusCode == 200) {
+        try {
+          return jsonDecode(response.body);
+        } catch (e) {
+          throw Exception("Invalid response format from server.");
+        }
+      } else {
+        throw Exception(
+          "Failed to update asset, Status Code: ${response.statusCode}",
+        );
+      }
+    } catch (error) {
+      throw Exception("Error updating asset: $error");
+    }
+  }
 }

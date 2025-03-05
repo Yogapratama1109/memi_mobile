@@ -135,7 +135,7 @@ class _AssetDetailPageState extends State<AssetDetailPage> {
           }
         });
 
-        // debugPrint("Asset Detail: $detail");
+        debugPrint("Asset Detail: $detail");
       } else {
         throw Exception("Invalid API response: 'data' key not found");
       }
